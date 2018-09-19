@@ -1,32 +1,27 @@
-package com.norxx.cli;
+package com.norxx.cli.model;
 
-import java.math.BigInteger;
 import java.security.SecureRandom;
 
 public class Code {
     private String codeString;
     private float amount;
-    public static final int codeLenght = 5;
-    enum status {
-            valid, invalid
-    }
+    public static final int codeLenght = 50;
+    boolean valid;
 
 
     public Code(float amount){
         this.amount = amount;
         this.codeString = generateSecureStringCode(codeLenght);
-        //добавить проверку, вдруг есть уже такой активный код
+        valid = true;
     }
 
-    private Code(String codeString, float amount){
+    public Code(String codeString, float amount, boolean valid){
         this.amount = amount;
         this.codeString = codeString;
+        this.valid = valid;
     }
 
-    private static Code getFromBase(String codeString){
-        return new Code(codeString, 999.12f);
-        //Todo сделать выгрузку кода из базы и ексепшен если нету такого кода
-    }
+
 
     public static String generateSecureStringCode(int codeLenght){
         String allowedSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
@@ -43,16 +38,26 @@ public class Code {
 
 
     public float getAmount(){
-        return this.amount;
+        return amount;
     }
 
     public String getCode() {
-        return codeString;
+    return codeString;
+    }
+
+    public boolean isValid() {
+    return valid;
     }
 
     @java.lang.Override
     public java.lang.String toString() {
-        return codeString;
+    String status;
+    if (valid) {
+        status = "Valid";
+    } else {
+        status = "Used";
+    }
+        return status + " Code, Amount : " + amount + " : " + codeString;
     }
 
 }
